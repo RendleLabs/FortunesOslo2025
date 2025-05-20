@@ -1,0 +1,13 @@
+2025-05-20 10:51:04.860 +02:00 [INF] [ThreadId:1] NBomber 5.8.2 started a new session: 2025-05-20_08.51.83_session_993bf1e7
+2025-05-20 10:51:04.879 +02:00 [INF] [ThreadId:1] NBomber started as single node
+2025-05-20 10:51:04.880 +02:00 [INF] [ThreadId:1] License validation....
+2025-05-20 10:51:04.880 +02:00 [WRN] [ThreadId:1] THIS VERSION IS FREE ONLY FOR PERSONAL USE. You can't use it for an organization.
+2025-05-20 10:51:04.889 +02:00 [INF] [ThreadId:1] Reports folder: /Users/rendle/workshop/Fortunes/test/Fortunes.LoadTests/bin/Release/net9.0/reports/2025-05-20_08.51.83_session_993bf1e7
+2025-05-20 10:51:04.890 +02:00 [INF] [ThreadId:1] Plugins: no plugins were loaded
+2025-05-20 10:51:04.890 +02:00 [INF] [ThreadId:1] Reporting sinks: no reporting sinks were loaded
+2025-05-20 10:51:04.890 +02:00 [INF] [ThreadId:1] Starting init...
+2025-05-20 10:51:04.893 +02:00 [INF] [ThreadId:1] Target scenarios: Get Fortune
+2025-05-20 10:51:04.894 +02:00 [INF] [ThreadId:1] Init finished
+2025-05-20 10:51:04.900 +02:00 [INF] [ThreadId:1] Starting warm up...
+2025-05-20 10:51:04.900 +02:00 [INF] [ThreadId:1] Warm up for scenarios: Get Fortune
+2025-05-20 10:51:04.902 +02:00 [INF] [ThreadId:1] Warm up duration: 00:00:30

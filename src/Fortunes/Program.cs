@@ -1,16 +1,40 @@
 using EFCore.BulkExtensions;
 using Fortunes.Data;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using OpenTelemetry;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOpenTelemetry()
+    .WithLogging()
+    .WithTracing(tracing =>
+    {
+        tracing.AddSource("Fortunes")
+            .AddAspNetCoreInstrumentation()
+            .AddEntityFrameworkCoreInstrumentation()
+            .AddNpgsql();
+    })
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddNpgsqlInstrumentation();
+    })
+    .UseOtlpExporter();
 
 builder.Services.AddDbContext<FortuneContext>(db =>
     db.UseNpgsql(builder.Configuration.GetConnectionString("Fortunes"))
         .UseSeeding((context, b) =>
         {
             if (context.Set<Fortune>().Any()) return;
+            
             var fortunes = FortuneSource.Get()
                 .Select(t => new Fortune { Text = t });
+            
             context.BulkInsert(fortunes);
         }));
 

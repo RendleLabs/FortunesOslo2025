@@ -5,3 +5,11 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: S3cr3tSqu1rr3l
+  aspire:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.0
+    ports:
+      - "18888:18888"
+      - "4317:18889"
+      - "4318:18890"
+    environment:
+      ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true
