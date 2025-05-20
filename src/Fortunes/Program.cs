@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 using EFCore.BulkExtensions;
 using Fortunes;
 using Fortunes.Data;
@@ -38,6 +39,11 @@ builder.Services.AddOpenTelemetry()
             .AddNpgsqlInstrumentation();
     })
     .UseOtlpExporter();
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+});
 
 builder.Services.AddDbContextPool<FortuneContext>(db =>
     db.UseNpgsql(builder.Configuration.GetConnectionString("Fortunes"))
@@ -83,18 +89,37 @@ app.MapGet("/fortune/{id}", async (FortuneContext context, int id) =>
     var activity = Activity.Current;
     activity?.SetTag("ndc.fortune.id", id);
     
-    var fortune = context.Fortunes.FirstOrDefault(f => f.Id == id);
-    if (fortune is null)
+    try
     {
-        activity?.SetStatus(ActivityStatusCode.Error);
-        return Results.NotFound();
+        var fortune = await context.Fortunes.FirstOrDefaultAsync(f => f.Id == id);
+        if (fortune is null)
+        {
+            activity?.SetStatus(ActivityStatusCode.Error);
+            return Results.NotFound();
+        }
+        Telemetry.FortuneSize.Record(fortune.Text.Length);
+        if (activity is not null)
+        {
+            activity.SetTag("ndc.fortune.text", fortune.Text);
+        }
+        return Results.Ok(fortune);
     }
-    Telemetry.FortuneSize.Record(fortune.Text.Length);
-    if (activity is not null)
+    catch (Exception e)
     {
-        activity.SetTag("ndc.fortune.text", fortune.Text);
+        if (activity is not null)
+        {
+            activity.SetStatus(ActivityStatusCode.Error);
+            activity.AddException(e);
+        }
+        return Results.InternalServerError();
     }
-    return Results.Ok(fortune);
 });
 
+Console.WriteLine("Running...");
 app.Run();
+
+[JsonSerializable(typeof(Fortune))]
+internal partial class AppJsonSerializerContext : JsonSerializerContext
+{
+
+}

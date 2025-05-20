@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C88DD14-F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortunes.LoadTests", "test\Fortunes.LoadTests\Fortunes.LoadTests.csproj", "{8812591E-F7FF-4428-BEE7-9E887654A435}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FortunesAOT", "src\FortunesAOT\FortunesAOT.csproj", "{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,18 @@ Global
 		{8812591E-F7FF-4428-BEE7-9E887654A435}.Release|x64.Build.0 = Release|Any CPU
 		{8812591E-F7FF-4428-BEE7-9E887654A435}.Release|x86.ActiveCfg = Release|Any CPU
 		{8812591E-F7FF-4428-BEE7-9E887654A435}.Release|x86.Build.0 = Release|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Debug|x64.Build.0 = Debug|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Debug|x86.Build.0 = Debug|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Release|x64.ActiveCfg = Release|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Release|x64.Build.0 = Release|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Release|x86.ActiveCfg = Release|Any CPU
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,5 +71,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{72E172CF-A06D-4C4C-B386-AA17EBFFB99B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{8812591E-F7FF-4428-BEE7-9E887654A435} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
+		{478C2443-75FC-4C34-BDFB-BCC56ACF4A4D} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+**nbomber_report**
+**nbomber-log**
+
 # dotenv files
 .env
 
