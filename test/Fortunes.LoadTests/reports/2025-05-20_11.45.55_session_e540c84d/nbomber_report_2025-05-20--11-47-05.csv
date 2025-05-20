@@ -1,0 +1,2 @@
+test_suite,test_name,scenario,duration,step_name,request_count,ok,failed,rps,min,mean,max,50_percent,75_percent,95_percent,99_percent,std_dev,data_transfer_min_kb,data_transfer_mean_kb,data_transfer_max_kb,data_transfer_all_mb
+nbomber_default_test_suite_name,nbomber_default_test_name,Get Fortune,00:01:00,global information,6000,5469,531,91.2,0.95,3.89,194.72,3.16,3.72,5.54,9.81,8.88,0.118,0.238,1.233,1.3

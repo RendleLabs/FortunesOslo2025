@@ -1,14 +1,27 @@
+using System.Diagnostics;
 using EFCore.BulkExtensions;
+using Fortunes;
 using Fortunes.Data;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+
 builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource =>
+    {
+        resource.Clear()
+            .AddService("fortunes")
+            .AddEnvironmentVariableDetector()
+            .AddTelemetrySdk()
+            .AddAttributes([new KeyValuePair<string, object>("workshop.location", "Oslo")]);
+    })
     .WithLogging()
     .WithTracing(tracing =>
     {
@@ -26,7 +39,7 @@ builder.Services.AddOpenTelemetry()
     })
     .UseOtlpExporter();
 
-builder.Services.AddDbContext<FortuneContext>(db =>
+builder.Services.AddDbContextPool<FortuneContext>(db =>
     db.UseNpgsql(builder.Configuration.GetConnectionString("Fortunes"))
         .UseSeeding((context, b) =>
         {
@@ -36,7 +49,9 @@ builder.Services.AddDbContext<FortuneContext>(db =>
                 .Select(t => new Fortune { Text = t });
             
             context.BulkInsert(fortunes);
-        }));
+        })
+        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+    );
 
 var app = builder.Build();
 
@@ -52,8 +67,34 @@ app.UseHttpsRedirection();
 
 app.MapGet("/fortune", (FortuneContext context) =>
 {
+    var activity = Activity.Current;
     var fortune = context.Fortunes.OrderBy(f => EF.Functions.Random()).First();
+    Telemetry.FortuneSize.Record(fortune.Text.Length);
+    if (activity is not null)
+    {
+        activity.SetTag("ndc.fortune.text", fortune.Text);
+        activity.SetTag("ndc.fortune.id", fortune.Id);
+    }
     return fortune;
+});
+
+app.MapGet("/fortune/{id}", async (FortuneContext context, int id) =>
+{
+    var activity = Activity.Current;
+    activity?.SetTag("ndc.fortune.id", id);
+    
+    var fortune = context.Fortunes.FirstOrDefault(f => f.Id == id);
+    if (fortune is null)
+    {
+        activity?.SetStatus(ActivityStatusCode.Error);
+        return Results.NotFound();
+    }
+    Telemetry.FortuneSize.Record(fortune.Text.Length);
+    if (activity is not null)
+    {
+        activity.SetTag("ndc.fortune.text", fortune.Text);
+    }
+    return Results.Ok(fortune);
 });
 
 app.Run();
